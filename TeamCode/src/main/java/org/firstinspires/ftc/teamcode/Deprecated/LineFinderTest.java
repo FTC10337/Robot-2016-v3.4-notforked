@@ -29,19 +29,19 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Deprecated;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.ftcrobotcontroller.R;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-import com.qualcomm.robotcore.hardware.DigitalChannelController;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.HardwareDM;
 
 /*
  *
@@ -70,21 +70,23 @@ import com.qualcomm.robotcore.hardware.DigitalChannelController;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-@TeleOp(name = "Test RGB Sensors", group = "Sensor")
-//@Disabled                           // Comment this out to add to the opmode list
-public class TestRGB extends LinearOpMode {
+@TeleOp(name = "Test Line Finder", group = "Sensor")
+@Disabled                           // Comment this out to add to the opmode list
+public class LineFinderTest extends LinearOpMode {
 
   HardwareDM robot = new HardwareDM();
 
   @Override
   public void runOpMode() throws InterruptedException {
-    robot.init(hardwareMap, false);
 
+    robot.init(hardwareMap);
       // adaHSV is an array that will hold the hue, saturation, and value information.
       float[] adaHSV = {0F, 0F, 0F};
 
     // adaValues is a reference to the adaHSV array.
     final float adaValues[] = adaHSV;
+
+    float WHITE_THRESHOLD = 2.0F;
 
 
     // get a reference to the RelativeLayout so we can change the background
@@ -95,13 +97,19 @@ public class TestRGB extends LinearOpMode {
     waitForStart();
 
     // Set Stripe finder LED on
-      robot.stripeColor.enableLed(true);
+    robot.stripeColor.enableLed(true);
 
+    robot.setDriveZeroPower(DcMotor.ZeroPowerBehavior.BRAKE);
     // loop and read the RGB data.
     // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
-    while (opModeIsActive())  {
+    while (opModeIsActive() && robot.stripeColor.alpha() < WHITE_THRESHOLD)  {
 
 
+      // Drive til we see the stripe
+      robot.lfDrive.setPower(0.8);
+      robot.lrDrive.setPower(0.8);
+      robot.rfDrive.setPower(0.8);
+      robot.rrDrive.setPower(0.8);
 
       // convert the RGB adaValues to HSV adaValues.
       Color.RGBToHSV((robot.beaconColor.red() * 255) / 800, (robot.beaconColor.green() * 255) / 800,
@@ -110,21 +118,49 @@ public class TestRGB extends LinearOpMode {
       // send the info back to driver station using telemetry function.
       telemetry.addData("Beacon Alpha", robot.beaconColor.alpha());
       telemetry.addData("Beacon Hue", adaHSV[0]);
-      telemetry.addData("Beacon Saturation", adaHSV[1]);
-      telemetry.addData("Beacon Value", adaHSV[2]);
-      //  telemetry.addData("Stripe Alpha", robot.stripeColor.alpha());
+        telemetry.addData("Stripe Alpha", robot.stripeColor.alpha());
 
       // change the background color to match the color detected by the RGB sensor.
       // pass a reference to the hue, saturation, and value array as an argument
       // to the HSVToColor method.
-      //relativeLayout.post(new Runnable() {
-       // public void run() {
-      //    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, adaValues));
-      //  }
-      //});
+      relativeLayout.post(new Runnable() {
+        public void run() {
+          relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, adaValues));
+        }
+      });
 
       telemetry.update();
       idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+    }
+    robot.setDriveZeroPower(DcMotor.ZeroPowerBehavior.FLOAT);
+    robot.lfDrive.setPower(0.0);
+    robot.lrDrive.setPower(0.0);
+    robot.rfDrive.setPower(0.0);
+    robot.rrDrive.setPower(0.0);
+
+    while(opModeIsActive()) {
+      // Keep displaying colors
+      // convert the RGB adaValues to HSV adaValues.
+      Color.RGBToHSV((robot.beaconColor.red() * 255) / 800, (robot.beaconColor.green() * 255) / 800,
+              (robot.beaconColor.blue() * 255) / 800, adaHSV);
+
+      // send the info back to driver station using telemetry function.
+      telemetry.addData("Beacon Alpha", robot.beaconColor.alpha());
+      telemetry.addData("Beacon Hue", adaHSV[0]);
+      telemetry.addData("Stripe Alpha", robot.stripeColor.alpha());
+
+      // change the background color to match the color detected by the RGB sensor.
+      // pass a reference to the hue, saturation, and value array as an argument
+      // to the HSVToColor method.
+      relativeLayout.post(new Runnable() {
+        public void run() {
+          relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, adaValues));
+        }
+      });
+
+      telemetry.update();
+      idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+
     }
   }
 }

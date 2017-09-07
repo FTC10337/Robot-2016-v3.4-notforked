@@ -99,13 +99,13 @@ public class HardwareDM
     AdafruitBNO055IMU adaGyro;
 
     /* Adafruit RGB Sensor */
-    ColorSensor beaconColor;
+    public ColorSensor beaconColor;
     // Device interface module (for controlling Adafruit RGB sensor LED)
     DeviceInterfaceModule cdim;
     static final int LED_CHANNEL = 0;
 
     // Modern Robotics Color sensor on bottom
-    ColorSensor stripeColor;
+    public ColorSensor stripeColor;
 
     // Shooter default speed
     public final static double SHOOT_DEFAULT = 0.925;

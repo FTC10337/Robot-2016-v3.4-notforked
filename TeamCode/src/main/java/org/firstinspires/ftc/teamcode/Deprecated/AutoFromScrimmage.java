@@ -30,7 +30,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Deprecated;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+import org.firstinspires.ftc.teamcode.HardwareDM;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -72,7 +73,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 public class AutoFromScrimmage extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareDM         robot   = new HardwareDM ();   // Use a Pushbot's hardware
+    HardwareDM robot   = new HardwareDM ();   // Use a Pushbot's hardware
     private ElapsedTime     runtime = new ElapsedTime();
 
     static final int        COUNTS_PER_MOTOR_REV    = 7 ;    // eg: AM Neverrest
