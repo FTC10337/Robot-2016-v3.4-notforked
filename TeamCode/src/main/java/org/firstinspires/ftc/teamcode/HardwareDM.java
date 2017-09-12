@@ -260,11 +260,11 @@ public class HardwareDM
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Set motor directions
-        setDriveDirection(DcMotor.Direction.REVERSE, DcMotor.Direction.FORWARD);
-        lShoot.setDirection(DcMotor.Direction.REVERSE);
-        rShoot.setDirection(DcMotor.Direction.FORWARD);
+        setDriveDirection(DcMotor.Direction.FORWARD, DcMotor.Direction.REVERSE);
+        lShoot.setDirection(DcMotor.Direction.FORWARD);
+        rShoot.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.FORWARD);
-        liftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Set motors to float mode to protect gearboxes from shock load
         setDriveZeroPower(DcMotor.ZeroPowerBehavior.FLOAT);
